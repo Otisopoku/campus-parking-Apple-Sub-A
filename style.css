@@ -3,6 +3,7 @@
   --secondary-color: #a5b9fd;
   --third-color: #E1E1EE;
   --fourth-color: #F2F3FF;
+  --fifth-color: #FFFFFF;
   --nav-text: #1c1c28;
 }
 
@@ -188,6 +189,18 @@ body {
   width: 16px;
   height: 16px;
   border-radius: 15%;
+}
+
+.spaces-key {
+  border-radius: 9999px;
+  background-color: var(--fifth-color);
+  width: 390px;
+  height: 40px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  align-items: center;
 }
 
 .color-key.available {
