@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <title>Document</title>
+    <title>Campus Parking</title>
   </head>
   <body>
     <nav id="nav-bar">
@@ -26,6 +26,16 @@
       </div>
     </nav>
     <main>
+      <div id="view-parking">
+      <div
+        id="thank-you-toast"
+        class="thank-you-toast"
+        role="status"
+        aria-live="polite"
+        hidden
+      >
+        Thank you! Your reservation is confirmed.
+      </div>
       <section id="parking-lot">
         <div id="parking-lot-title">
           <p>PB PARKING LOT</p>
@@ -57,23 +67,23 @@
           </div>
           <div class="grid-item spaces">
             <div class="grid-item spaces-one">
-              <button class="spaces-one-item">
-                <div class="color-key btn occupied"></div>
+              <button class="spaces-one-item" type="button" data-spot="A1" aria-label="Parking spot A1">
+                <div class="color-key btn available"></div>
                 <p>A1</p>
               </button>
-              <button class="spaces-one-item">
+              <button class="spaces-one-item" type="button" data-spot="A2" aria-label="Parking spot A2">
                 <div class="color-key btn available"></div>
                 <p>A2</p>
               </button>
-              <button class="spaces-one-item">
+              <button class="spaces-one-item" type="button" data-spot="A3" aria-label="Parking spot A3">
                 <div class="color-key btn available"></div>
                 <p>A3</p>
               </button>
-              <button class="spaces-one-item">
-                <div class="color-key btn occupied"></div>
+              <button class="spaces-one-item" type="button" data-spot="A4" aria-label="Parking spot A4">
+                <div class="color-key btn available"></div>
                 <p>A4</p>
               </button>
-              <button class="spaces-one-item">
+              <button class="spaces-one-item" type="button" data-spot="A5" aria-label="Parking spot A5">
                 <div class="color-key btn available"></div>
                 <p>A5</p>
               </button>
@@ -83,23 +93,23 @@
               <hr/>
             </div>
             <div class="grid-item spaces-three">
-              <button class="spaces-three-item">
-                <div class="btn selected"></div>
-                <p class="selected-space">B1(SELECTED)</p>
+              <button class="spaces-three-item" type="button" data-spot="B1" aria-label="Parking spot B1">
+                <div class="color-key btn available"></div>
+                <p>B1</p>
               </button>
-              <button class="spaces-three-item">
+              <button class="spaces-three-item" type="button" data-spot="B2" aria-label="Parking spot B2">
                 <div class="color-key btn available"></div>
                 <p>B2</p>
               </button>
-              <button class="spaces-three-item">
-                <div class="color-key btn occupied"></div>
+              <button class="spaces-three-item" type="button" data-spot="B3" aria-label="Parking spot B3">
+                <div class="color-key btn available"></div>
                 <p>B3</p>
               </button>
-              <button class="spaces-three-item">
+              <button class="spaces-three-item" type="button" data-spot="B4" aria-label="Parking spot B4">
                 <div class="color-key btn available"></div>
                 <p>B4</p>
               </button>
-              <button class="spaces-three-item">
+              <button class="spaces-three-item" type="button" data-spot="B5" aria-label="Parking spot B5">
                 <div class="color-key btn available"></div>
                 <p>B5</p>
               </button>
@@ -114,17 +124,17 @@
               <div class="details-list" role="list">
                 <div class="details-item" role="listitem">
                   <div class="details-icon" aria-hidden="true">
-                    <img src="./location.png" alt="" />
+                    <img src="./location.png" alt="location image" />
                   </div>
                   <div class="details-text">
                     <div class="details-label">SELECTED SPOT</div>
-                    <div class="details-value">Row B, Spot 1</div>
+                    <div class="details-value" id="selected-spot">—</div>
                   </div>
                 </div>
 
                 <div class="details-item" role="listitem">
                   <div class="details-icon" aria-hidden="true">
-                    <img src="./time.png" alt="" />
+                    <img src="./time.png" alt="time image" />
                   </div>
                   <div class="details-text">
                     <div class="details-label">RATE</div>
@@ -134,7 +144,7 @@
 
                 <div class="details-item" role="listitem">
                   <div class="details-icon" aria-hidden="true">
-                    <img src="./battery.png" alt="" />
+                    <img src="./battery.png" alt="battery image" />
                   </div>
                   <div class="details-text">
                     <div class="details-label">CHARGING</div>
@@ -144,8 +154,24 @@
               </div>
 
               <div class="checkout-actions">
-                <button class="checkout-primary" type="button">Proceed to Checkout</button>
-                <button class="checkout-secondary" type="button">Change Area</button>
+                <button
+                  class="checkout-primary"
+                  type="button"
+                  id="proceed-checkout-btn"
+                  disabled
+                  aria-disabled="true"
+                >
+                  Proceed to Checkout
+                </button>
+                <button
+                  class="checkout-secondary"
+                  type="button"
+                  id="change-area-btn"
+                  disabled
+                  aria-disabled="true"
+                >
+                  Change Area
+                </button>
               </div>
             </div>
 
@@ -161,19 +187,87 @@
           </div>
         </aside>
       </section>
-    </main>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <div class="footer-logo">Campus Parking</div>
-          <div class="footer-copy">© 2026 Apple Sub A. All rights reserved.</div>
-        </div>
-
-        <nav class="footer-links" aria-label="Footer links">
-          <a href="#">Terms of Service</a>
-          <a href="#">Contact Us</a>
-        </nav>
       </div>
-    </footer>
+
+      <section
+        id="view-booking"
+        class="view-booking"
+        hidden
+        aria-hidden="true"
+      >
+        <div class="booking-shell">
+          <div class="booking-card">
+            <div class="booking-spot-badge" aria-hidden="true">
+              <span class="booking-p-icon">P</span>
+            </div>
+            <p class="booking-kicker">SELECTED SPOT</p>
+            <h1 class="booking-spot-title" id="booking-spot-title">Spot —</h1>
+
+            <div class="booking-field">
+              <label class="booking-label" for="booking-minutes">MINUTES NEEDED</label>
+              <div class="booking-input-wrap">
+                <input
+                  type="number"
+                  id="booking-minutes"
+                  class="booking-minutes-input"
+                  min="1"
+                  max="480"
+                  value="60"
+                  inputmode="numeric"
+                />
+                <span class="booking-input-suffix">mins</span>
+              </div>
+            </div>
+
+            <div class="booking-summary">
+              <div class="booking-row">
+                <span>Rate</span>
+                <span id="booking-rate-display">GHC 0.10 / min</span>
+              </div>
+              <div class="booking-row">
+                <span>Duration</span>
+                <span id="booking-duration-display">60 mins</span>
+              </div>
+              <div class="booking-divider"></div>
+              <p class="booking-formula" id="booking-formula">GHC 0.10 × 60 mins</p>
+              <div class="booking-row booking-row--total">
+                <span class="booking-total-label">TOTAL COST</span>
+                <span class="booking-total-value" id="booking-total">GHC 6.00</span>
+              </div>
+            </div>
+
+            <button type="button" class="booking-confirm-btn" id="confirm-booking-btn">
+              Confirm Booking
+            </button>
+            <button type="button" class="booking-change-spot" id="change-spot-btn">
+              Change Spot
+            </button>
+          </div>
+
+          <p class="booking-trust">
+            <svg class="booking-trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            SECURE RESERVATION + PARKSWIFT GUARANTEED
+          </p>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <div class="footer-logo">Campus Parking</div>
+            <div class="footer-copy">© 2026 Apple Sub A. All rights reserved.</div>
+          </div>
+
+          <nav class="footer-links" aria-label="Footer links">
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+          </nav>
+        </div>
+      </footer>
+    </main>
+    <script src="./app.js" defer></script>
   </body>
 </html>

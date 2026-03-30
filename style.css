@@ -19,11 +19,36 @@ body {
   padding-top: 24px;
   font-family: "Inter",system-ui, -apple-system, "Segoe UI", Arial, Helvetica, sans-serif;
   scroll-behavior: smooth;
+  background: #f7f7fb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
 
 html,
 body {
   overflow-x: hidden;
+}
+
+/* Scroll the page without showing the scrollbar (still mouse wheel / touch / keyboard) */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge / IE */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge Chromium */
 }
 
 img {
@@ -32,6 +57,7 @@ img {
 }
 
 .site-footer {
+  margin-top: auto;
   background: var(--sixth-color);
   border-radius: 14px;
   border: 1px solid color-mix(in srgb, var(--primary-color) 10%, transparent);
@@ -105,7 +131,7 @@ img {
   justify-content: space-between;
   gap: 1rem 1.5rem;
   margin-bottom: 1.5rem;
-  background: #fff;
+  
 }
 
 #logo {
@@ -214,7 +240,7 @@ img {
   grid-template-columns: 2fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "spaces checkout";
-  gap: 100px;
+  gap: 50px;
   margin-top: 48px;
   background: #fff;
   border-radius: 14px;
@@ -305,8 +331,8 @@ img {
   display: block;
   object-fit: contain;
   /*
-    PNGs can't be recolored via "color", so we tint them with a filter
-    to match --primary-color (#0042b3).
+    PNGs can not be recolored using the color property of css, so we use the filter to do the effects we need
+    In this case, the match the primary color to the icon
   */
   filter: brightness(0) saturate(100%) invert(16%) sepia(92%) saturate(4600%)
     hue-rotate(214deg) brightness(88%) contrast(118%);
@@ -385,6 +411,25 @@ img {
 .checkout-secondary:focus-visible {
   outline: 2px solid var(--secondary-color);
   outline-offset: 3px;
+}
+
+.checkout-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.checkout-primary:disabled:hover {
+  background: var(--primary-color);
+}
+
+.checkout-secondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.checkout-secondary:disabled:hover {
+  background: transparent;
 }
 
 .checkout-help {
@@ -476,7 +521,7 @@ img {
 }
 
 .spaces-key-item span {
-  padding-top: 4px;
+  padding-top: 2px;
 }
 
 .color-key {
@@ -484,18 +529,6 @@ img {
   height: 16px;
   border-radius: 15%;
 }
-
-/* .spaces-key {
-  border-radius: 9999px;
-  background-color: var(--fifth-color);
-  width: 390px;
-  height: 40px;
-  padding-left: 24px;
-  padding-right: 24px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  align-items: center;
-} */
 
 .color-key.available {
   background-color: var(--secondary-color)
@@ -552,6 +585,35 @@ img {
   outline: none;
 }
 
+.spaces-one-item:disabled,
+.spaces-three-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.spaces-one-item:disabled .btn,
+.spaces-three-item:disabled .btn {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* Learning: Occupied tile: child div can steal hover cursor without this */
+.spaces-one-item:disabled .color-key.btn,
+.spaces-three-item:disabled .color-key.btn {
+  cursor: not-allowed;
+}
+
+/* Learning: After a spot is chosen: other spots are not selectable — show blocked cursor */
+#spaces-container[data-selection-locked="true"]
+  button[data-spot]:not([data-state="selected"]) {
+  cursor: not-allowed;
+}
+
+#spaces-container[data-selection-locked="true"]
+  button[data-spot][data-state="selected"] {
+  cursor: default;
+}
+
 .grid-item.spaces-one{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -581,6 +643,7 @@ img {
   background-color: var(--nav-text);
   border: none;
   background: repeating-linear-gradient(
+    /*Learning: Using the linear gradient to create the long and short dashes*/
     to right,
     var(--third-color) 0 20px,   /* Long dash: 20px */
     transparent 20px 30px, /* Gap after long dash: 10px */
@@ -591,14 +654,18 @@ img {
 }
 
 .color-key.btn {
+  box-sizing: border-box;
   width: 100%;
   height: clamp(96px, 12vw, 141px);
+  min-height: clamp(96px, 12vw, 141px);
+  max-height: clamp(96px, 12vw, 141px);
   border-radius: 12px;
-  padding-top: 30px;
+  padding: 30px 4px 0;
   margin-bottom: 10px;
   position: relative;
   display: grid;
   place-items: center;
+  flex-shrink: 0;
 }
 
 .color-key.btn::after {
@@ -636,29 +703,8 @@ img {
   opacity: 0.95;
 }
 
-.btn.selected::after {
-  background-image: none;
-  content: "P";
-  width: auto;
-  height: auto;
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  color: #fff;
-  opacity: 0.95;
-}
-
-.btn.selected {
+.color-key.btn.selected {
   background-color: var(--primary-color);
-  width: 100%;
-  height: clamp(110px, 13vw, 153px);
-  border-radius: 12px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  margin-bottom: 10px;
-  position: relative;
-  display: grid;
-  place-items: center;
 }
 
 .color-key.btn > p {
@@ -668,14 +714,22 @@ img {
 }
 
 .selected-space {
-  font-size: 12px !important;
-  font-weight:900;
+  font-size: 10px !important;
+  font-weight: 900;
   color: var(--primary-color) !important;
 }
 
-/* -----------------------------
-   Responsive layout
--------------------------------- */
+.grid-item.spaces-one .spaces-one-item p,
+.grid-item.spaces-three .spaces-three-item p {
+  min-height: 2.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 100%;
+}
+
+
 @media (max-width: 1100px) {
   #parking-lot-map {
     grid-template-columns: 1fr;
@@ -744,4 +798,252 @@ img {
   .grid-item.spaces-three {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.thank-you-toast {
+  margin-bottom: 20px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--primary-color) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 22%, transparent);
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--nav-text);
+}
+
+.thank-you-toast[hidden] {
+  display: none !important;
+}
+
+
+.view-booking {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 0 48px;
+}
+
+.view-booking[hidden] {
+  display: none !important;
+}
+
+.booking-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.booking-card {
+  width: 100%;
+  background: var(--fifth-color);
+  border-radius: 16px;
+  padding: 32px 28px 28px;
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--primary-color) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nav-text) 8%, transparent);
+}
+
+.booking-spot-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+}
+
+.booking-p-icon {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+
+.booking-kicker {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--nav-text) 50%, transparent);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.booking-spot-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--nav-text);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.booking-field {
+  margin-bottom: 20px;
+}
+
+.booking-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--nav-text) 50%, transparent);
+  margin-bottom: 10px;
+}
+
+.booking-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--nav-text) 18%, transparent);
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.booking-minutes-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  padding: 14px 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--nav-text);
+}
+
+.booking-minutes-input:focus {
+  outline: none;
+}
+
+.booking-input-wrap:focus-within {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 0;
+}
+
+.booking-input-suffix {
+  padding: 14px 16px 14px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--nav-text) 55%, transparent);
+}
+
+.booking-summary {
+  background: var(--fourth-color);
+  border-radius: 12px;
+  padding: 18px 16px;
+  margin-bottom: 22px;
+}
+
+.booking-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--nav-text);
+}
+
+.booking-row + .booking-row {
+  margin-top: 10px;
+}
+
+.booking-divider {
+  height: 1px;
+  background: color-mix(in srgb, var(--nav-text) 12%, transparent);
+  margin: 14px 0 12px;
+}
+
+.booking-formula {
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--nav-text) 55%, transparent);
+  margin-bottom: 12px;
+}
+
+.booking-row--total {
+  align-items: center;
+}
+
+.booking-total-label {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.booking-total-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+.booking-confirm-btn {
+  width: 100%;
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 20px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  font-family: inherit;
+  color: #fff;
+  background: var(--primary-color);
+  cursor: pointer;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--primary-color) 28%, transparent);
+  transition: background-color 0.18s ease, transform 0.15s ease;
+}
+
+.booking-confirm-btn:hover {
+  background: color-mix(in srgb, var(--primary-color) 88%, #000);
+}
+
+.booking-confirm-btn:active {
+  transform: translateY(1px);
+}
+
+.booking-confirm-btn:focus-visible {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 3px;
+}
+
+.booking-change-spot {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 8px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.booking-change-spot:hover {
+  color: color-mix(in srgb, var(--primary-color) 80%, #000);
+}
+
+.booking-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--nav-text) 50%, transparent);
+  text-align: center;
+  max-width: 420px;
+}
+
+.booking-trust-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: color-mix(in srgb, var(--nav-text) 45%, transparent);
 }
