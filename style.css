@@ -17,7 +17,18 @@ body {
   padding-left: 32px;
   padding-right: 32px;
   padding-top: 24px;
-  font-family: system-ui, -apple-system, "Segoe UI", Arial, Helvetica, sans-serif;
+  font-family: "Inter",system-ui, -apple-system, "Segoe UI", Arial, Helvetica, sans-serif;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 .site-footer {
@@ -25,9 +36,9 @@ body {
   border-radius: 14px;
   border: 1px solid color-mix(in srgb, var(--primary-color) 10%, transparent);
   box-shadow: 0 8px 24px color-mix(in srgb, var(--primary-color) 8%, transparent);
-  width: calc(100% + 64px);
-  margin-left: -32px;
-  margin-right: -32px;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   border-left: none;
   border-right: none;
   border-radius: 0;
@@ -49,7 +60,7 @@ body {
 }
 
 .footer-logo {
-  font-weight: 900;
+  font-weight: 700;
   color: var(--nav-text);
   letter-spacing: -0.02em;
 }
@@ -203,12 +214,13 @@ body {
   grid-template-columns: 2fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "spaces checkout";
-  gap: 64px;
+  gap: 100px;
   margin-top: 48px;
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 8px 30px color-mix(in srgb, var(--primary-color) 8%, transparent);
   align-items: start;
+  width: 100%;
 }
 
 #spaces-container {
@@ -217,7 +229,6 @@ body {
 
 #checkout-panel {
   grid-area: checkout;
-  padding: 24px 24px 24px 0;
 }
 
 .checkout-stack {
@@ -293,6 +304,12 @@ body {
   height: 16px;
   display: block;
   object-fit: contain;
+  /*
+    PNGs can't be recolored via "color", so we tint them with a filter
+    to match --primary-color (#0042b3).
+  */
+  filter: brightness(0) saturate(100%) invert(16%) sepia(92%) saturate(4600%)
+    hue-rotate(214deg) brightness(88%) contrast(118%);
 }
 
 .details-label {
@@ -306,7 +323,7 @@ body {
 
 .details-value {
   font-size: 0.95rem;
-  font-weight: 900;
+  font-weight: 700;
   color: var(--nav-text);
 }
 
@@ -331,7 +348,7 @@ body {
   border: none;
   border-radius: 12px;
   padding: 13px 16px;
-  font-weight: 900;
+  font-weight: 700;
   font-size: 0.9rem;
   cursor: pointer;
   transition: transform 0.15s ease, background-color 0.18s ease, box-shadow 0.18s ease;
@@ -383,7 +400,7 @@ body {
 }
 
 .help-strong {
-  font-weight: 900;
+  font-weight: 700;
   color: #fff;
 }
 
@@ -391,7 +408,7 @@ body {
   display: inline-block;
   margin-top: 10px;
   color: #fff;
-  font-weight: 900;
+  font-weight: 700;
   text-decoration: none;
   letter-spacing: 0.12em;
   font-size: 0.7rem;
@@ -418,8 +435,8 @@ body {
 
 #spaces-container {
   background-color: var(--fourth-color);
-  min-width: 800px;
-  height: 896px;
+  min-width: 0;
+  height: auto;
   border-radius: 12px;
   padding-top: 32px;
   padding-left: 32px;
@@ -493,8 +510,9 @@ body {
 .grid-item.spaces {
   display: grid;
   grid-template-rows: 2fr 1fr 2fr;
-  min-width: 736px;
-  height: 586px;
+  width: 85%;
+  min-width: 0;
+  height: auto;
   gap: 48px;
   background-color: var(--fifth-color);
   padding: 40px;
@@ -574,7 +592,7 @@ body {
 
 .color-key.btn {
   width: 100%;
-  height: 141px;
+  height: clamp(96px, 12vw, 141px);
   border-radius: 12px;
   padding-top: 30px;
   margin-bottom: 10px;
@@ -633,7 +651,7 @@ body {
 .btn.selected {
   background-color: var(--primary-color);
   width: 100%;
-  height: 153px;
+  height: clamp(110px, 13vw, 153px);
   border-radius: 12px;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -653,4 +671,77 @@ body {
   font-size: 12px !important;
   font-weight:900;
   color: var(--primary-color) !important;
+}
+
+/* -----------------------------
+   Responsive layout
+-------------------------------- */
+@media (max-width: 1100px) {
+  #parking-lot-map {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "spaces"
+      "checkout";
+    gap: 32px;
+  }
+
+  #checkout-panel {
+    padding: 0 0 24px 0;
+  }
+
+  #spaces-container {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 48px;
+  }
+}
+
+@media (max-width: 780px) {
+  body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  #spaces-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .spaces-key {
+    width: 100%;
+    gap: 1.5rem;
+    padding-left: 0.8rem;
+  }
+
+  .spaces-key-item span {
+    padding-top: 2px; 
+  }
+
+  .grid-item.spaces {
+    padding: 20px;
+    gap: 28px;
+    display: grid;
+    grid-template-rows: 2fr 0.3fr 2fr;
+  }
+
+  .grid-item.spaces-one,
+  .grid-item.spaces-three {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  #parking-lot-subtitle {
+    font-size: 36px;
+  }
+
+  #parking-lot-description {
+    font-size: 16px;
+  }
+
+  .grid-item.spaces-one,
+  .grid-item.spaces-three {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
