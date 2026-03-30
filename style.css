@@ -146,7 +146,7 @@ body {
 
 #spaces-container {
   background-color: var(--fourth-color);
-  width: 1216px;
+  min-width: 800px;
   height: 896px;
   border-radius: 12px;
   padding-top: 32px;
@@ -155,13 +155,11 @@ body {
   padding-bottom:198px;
   display:flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   gap: 32px;
 }
 
-.grid-item.spaces {
-  width: 390px;
+.grid-item.spaces-key {
   height: 80px;
 }
 
@@ -213,3 +211,112 @@ body {
   background-color: var(--primary-color)
 }
 
+.grid-item.spaces {
+  display: grid;
+  grid-template-rows: 2fr 1fr 2fr;
+  min-width: 736px;
+  height: 586px;
+  gap: 48px;
+  background-color: var(--fifth-color);
+  padding: 40px;
+}
+
+.grid-item.spaces p{
+  font-size: 10px;
+  font-weight:900;
+  color: var(--nav-text);
+}
+
+.spaces-one-item,
+.spaces-three-item {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.spaces-one-item:focus,
+.spaces-three-item:focus,
+.spaces-one-item:focus-visible,
+.spaces-three-item:focus-visible {
+  outline: none;
+}
+
+.grid-item.spaces-one{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.grid-item.spaces-three {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.grid-item.spaces-two{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--fourth-color);
+  border-radius: 8px;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.grid-item.spaces-two hr {
+  width: 100%;
+  height: 3px;
+  background-color: var(--nav-text);
+  border: none;
+  background: repeating-linear-gradient(
+    to right,
+    var(--third-color) 0 20px,   /* Long dash: 20px */
+    transparent 20px 30px, /* Gap after long dash: 10px */
+    var(--third-color) 30px 40px, /* Short dash: 10px */
+    transparent 40px 50px  /* Gap after short dash: 10px */
+  );
+  opacity: 1;
+}
+
+.color-key.btn {
+  width: 100%;
+  height: 141px;
+  border-radius: 12px;
+  padding-top: 30px;
+  margin-bottom: 10px;
+}
+
+.btn.selected {
+  background-color: var(--primary-color);
+  width: 100%;
+  height: 153px;
+  border-radius: 12px;
+  padding-top: 30px;
+  margin-bottom: 10px;
+}
+
+.color-key.btn > p {
+  font-size: 20px;
+  font-weight:900;
+  color: var(--nav-text);
+}
+
+.selected-space {
+  font-size: 12px !important;
+  font-weight:900;
+  color: var(--primary-color) !important;
+}
